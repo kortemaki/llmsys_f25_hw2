@@ -1,10 +1,10 @@
-# Assignment 1: Minitorch Framework
+# Assignment 2: Minitorch Framework
 
 The goal of this assignment is to implement a basic deep learning framework, miniTorch, which is capable of performing operations on tensors with automatic differentiation and necessary operators. In this assignment, we will construct a simple feedforward neural network for a sentiment classification task. We will implement the automatic differentiation framework, simple neural network architecture, and training and evaluation algorithms in Python.
 
 ## Environment Setup
 
-The starting code base is provided in [llmsys_f25_hw1](https://github.com/llmsystem/llmsys_f25_hw1).
+The starting code base is provided in [llmsys_f25_hw2](https://github.com/llmsystem/llmsys_f25_hw2).
 
 Please check your version of Python (Python 3.8+), run either:
 
@@ -32,8 +32,8 @@ conda activate minitorch
 Then clone the starter codes from the git repo and install packages.
 
 ```bash
-git clone https://github.com/llmsystem/llmsys_f25_hw1.git
-cd llmsys_f25_hw1
+git clone https://github.com/llmsystem/llmsys_f25_hw2.git
+cd llmsys_f25_hw2
 # If you are using PSC, 
 # please load the CUDA module before installing packages:
 # module load cuda/12.4.0
@@ -158,6 +158,7 @@ class Network(minitorch.Module):
 After correctly implementing the functions, you should be able to pass tests marked as network.
 
 ```bash
+python -m pytest -l -v -k "linear"
 python -m pytest -l -v -k "network"
 ```
 
@@ -200,7 +201,7 @@ You should be able to achieve a best validation accuracy equal to or higher than
 
 ## Submission
 
-Please submit the whole directory `llmsys_f25_hw1` as a zip on canvas. Your code will be automatically compiled and graded with private test cases.
+Please submit the whole directory `llmsys_f25_hw2` as a zip on canvas. Your code will be automatically compiled and graded with private test cases.
 
 ## FAQs
 
