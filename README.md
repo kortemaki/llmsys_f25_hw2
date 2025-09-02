@@ -13,20 +13,13 @@ python --version
 python3 --version
 ```
 
-We also highly recommend setting up a virtual environment. The virtual environment lets you install packages that are only used for your assignments and do not impact the rest of the system. We suggest venv or anaconda.
+We also highly recommend setting up a virtual environment. The virtual environment lets you install packages that are only used for your assignments and do not impact the rest of the system. We recommend venv as it is lightweight and easy to use (<a href="https://docs.python.org/3/tutorial/venv.html">Tutorial</a>).
 
-For example, if you choose venv, run the following command:
+Run the following command:
 
 ```bash
 python -m venv venv
 source venv/bin/activate
-```
-
-If you choose anaconda, run the following command:
-
-```bash
-conda create -n minitorch python=3.9
-conda activate minitorch
 ```
 
 Then clone the starter codes from the git repo and install packages.
