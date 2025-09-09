@@ -90,9 +90,9 @@ class Variable(Protocol):
         """
         pass
 
-def _var_parent_ids(variable: Variable) -> Iterable(int):
+def _var_parent_ids(variable: Variable) -> Iterable[int]:
     """Get the ids of this variable's immediate parents."""
-    return (p.unique_id for p in variable.parents if !p.is_constant())
+    return (p.unique_id for p in variable.parents if not p.is_constant())
 
 
 def _count_in_edges(variable: Variable, counts: Counter, var_index: dict[int, Variable]) -> None:
@@ -143,7 +143,8 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
         in_edges.subtract(_var_parent_ids(var))
 
         # check for empty graph
-        if !var_index:
+        if not var_index:
+            """At this point we should have processed all variables"""
             if in_edges:
                 raise Exception(f"Error: edges left in graph after processing!")
             break
