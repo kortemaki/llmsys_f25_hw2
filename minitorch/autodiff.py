@@ -1,3 +1,4 @@
+from collections import Counter, defaultdict
 from dataclasses import dataclass
 from typing import Any, Iterable, List, Tuple
 
@@ -89,6 +90,29 @@ class Variable(Protocol):
         """
         pass
 
+def _var_parent_ids(variable: Variable) -> Iterable(int):
+    """Get the ids of this variable's immediate parents."""
+    return (p.unique_id for p in variable.parents if !p.is_constant())
+
+
+def _count_in_edges(variable: Variable, counts: Counter, var_index: dict[int, Variable]) -> None:
+    """
+    Counts the number of parent edges into each
+    Mutates the counts dict in-place.
+    """
+    if variable.is_constant():
+        return
+
+    var_index[variable.unique_id] = variable
+
+    if variable.is_leaf():
+        return
+
+    counts.update(_var_parent_ids(variable))
+
+    for p in variable.parents:
+        _count_in_edges(p, counts, var_index)
+
 
 def topological_sort(variable: Variable) -> Iterable[Variable]:
     """
@@ -101,9 +125,29 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
         Non-constant Variables in topological order starting from the right.
     """
     # BEGIN ASSIGN1_1
-    # TODO
-    
-    raise NotImplementedError("Task Autodiff Not Implemented Yet")
+    # compute the in-edges for each node in the graph
+    in_edges = Counter()
+    var_index = {}
+    _count_in_edges(variable, in_edges, var_index)
+
+    while var_index:
+        # get a var with no in edges
+        var = var_index[min(var_index.keys, key=lambda vid: in_edges[vid])]
+        if in_edges[var]:
+            raise Exception(f"Error: minimum node {var.unique_id} has {in_edges[var]} in edges!!")
+
+        # remove var from the graph
+        yield var
+        del in_edges[var.unique_id]
+        del var_index[var.unique_id]
+        in_edges.subtract(_var_parent_ids(var))
+
+        # check for empty graph
+        if !var_index:
+            if in_edges:
+                raise Exception(f"Error: edges left in graph after processing!")
+            break
+
     # END ASSIGN1_1
 
 
@@ -119,9 +163,16 @@ def backpropagate(variable: Variable, deriv: Any) -> None:
     No return. Should write to its results to the derivative values of each leaf through `accumulate_derivative`.
     """
     # BEGIN ASSIGN1_1
-    # TODO
-   
-    raise NotImplementedError("Task Autodiff Not Implemented Yet")
+
+    # base case - variable is a leaf - accumulate deriv here
+    if variable.is_leaf():
+        variable.accumulate_derivative(deriv)
+        return
+
+    # recursive case - propagate deriv using the chain rule
+    for (var, d_part) in variable.chain_rule(deriv):
+        backpropagate(var, d_part)
+
     # END ASSIGN1_1
 
 
