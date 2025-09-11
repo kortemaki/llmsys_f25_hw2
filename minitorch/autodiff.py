@@ -110,10 +110,12 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
         For each node in the computation graph, recursively find the incoming nodes,
         visit them first and then add node to visited nodes.
         """
-        if not node.is_constant():
-            for input_node in node.parents:
-                if input_node.unique_id not in visited_nodes:
-                    yield from recursive_helper(input_node)
+        if node.is_constant():
+            Return
+
+        for input_node in node.parents:
+            if input_node.unique_id not in visited_nodes:
+                yield from recursive_helper(input_node)
 
         visited_nodes.add(node.unique_id)
         yield node
