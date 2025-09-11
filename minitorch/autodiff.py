@@ -120,7 +120,8 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
         visited_nodes.add(node.unique_id)
         yield node
 
-    yield from recursive_helper(variable)
+    # order starting from the right
+    return list(recursive_helper(variable))[::-1]
     # END ASSIGN1_1
 
 
