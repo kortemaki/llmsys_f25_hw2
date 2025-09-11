@@ -112,7 +112,7 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
         """
         for input_node in node.parents:
             if input_node.unique_id not in visited_nodes:
-                recursive_helper(input_node)
+                yield from recursive_helper(input_node)
 
         visited_nodes.add(node.unique_id)
         yield node
