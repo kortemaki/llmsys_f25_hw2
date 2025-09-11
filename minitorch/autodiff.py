@@ -111,7 +111,7 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
         visit them first and then add node to visited nodes.
         """
         if node.is_constant():
-            Return
+            return
 
         for input_node in node.parents:
             if input_node.unique_id not in visited_nodes:
