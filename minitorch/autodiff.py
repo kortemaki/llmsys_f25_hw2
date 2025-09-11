@@ -105,7 +105,7 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
     # compute the in-edges for each node in the graph
     visited_nodes = set()
 
-    def recursive_helper(node: Variable):
+    def recursive_helper(node: Variable) -> Iterable[Variable]:
         """
         For each node in the computation graph, recursively find the incoming nodes,
         visit them first and then add node to visited nodes.
@@ -117,7 +117,7 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
         visited_nodes.add(node)
         yield node
 
-    recursive_helper(variable)
+    yield from recursive_helper(variable)
     # END ASSIGN1_1
 
 
