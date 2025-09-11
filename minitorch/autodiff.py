@@ -138,6 +138,10 @@ def backpropagate(variable: Variable, deriv: Any) -> None:
     """
     # BEGIN ASSIGN1_1
 
+    # base case - variable is constant - no derivative to propagate
+    if variable.is_constant():
+        return
+    
     # base case - variable is a leaf - accumulate deriv here
     if variable.is_leaf():
         variable.accumulate_derivative(deriv)
