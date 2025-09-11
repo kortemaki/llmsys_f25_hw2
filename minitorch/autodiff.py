@@ -111,10 +111,10 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
         visit them first and then add node to visited nodes.
         """
         for input_node in node.parents:
-            if input_node not in visited_nodes:
+            if input_node.unique_id not in visited_nodes:
                 recursive_helper(input_node)
 
-        visited_nodes.add(node)
+        visited_nodes.add(node.unique_id)
         yield node
 
     yield from recursive_helper(variable)
