@@ -90,29 +90,6 @@ class Variable(Protocol):
         """
         pass
 
-def _var_parent_ids(variable: Variable) -> Iterable[int]:
-    """Get the ids of this variable's immediate parents."""
-    return (p.unique_id for p in variable.parents if not p.is_constant())
-
-
-def _count_in_edges(variable: Variable, counts: Counter, var_index: dict[int, Variable]) -> None:
-    """
-    Counts the number of parent edges into each
-    Mutates the counts dict in-place.
-    """
-    if variable.is_constant():
-        return
-
-    var_index[variable.unique_id] = variable
-
-    if variable.is_leaf():
-        return
-
-    counts.update(_var_parent_ids(variable))
-
-    for p in variable.parents:
-        _count_in_edges(p, counts, var_index)
-
 
 def topological_sort(variable: Variable) -> Iterable[Variable]:
     """
@@ -126,29 +103,21 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
     """
     # BEGIN ASSIGN1_1
     # compute the in-edges for each node in the graph
-    in_edges = Counter()
-    var_index = {}
-    _count_in_edges(variable, in_edges, var_index)
+    visited_nodes = set()
 
-    while var_index:
-        # get a var with no in edges
-        var = var_index[min(var_index.keys, key=lambda vid: in_edges[vid])]
-        if in_edges[var]:
-            raise Exception(f"Error: minimum node {var.unique_id} has {in_edges[var]} in edges!!")
+    def recursive_helper(node: Variable):
+        """
+        For each node in the computation graph, recursively find the incoming nodes,
+        visit them first and then add node to visited nodes.
+        """
+        for input_node in node.parents:
+            if input_node not in visited_nodes:
+                recursive_helper(input_node)
 
-        # remove var from the graph
-        yield var
-        del in_edges[var.unique_id]
-        del var_index[var.unique_id]
-        in_edges.subtract(_var_parent_ids(var))
+        visited_nodes.add(node)
+        yield node
 
-        # check for empty graph
-        if not var_index:
-            """At this point we should have processed all variables"""
-            if in_edges:
-                raise Exception(f"Error: edges left in graph after processing!")
-            break
-
+    recursive_helper(variable)
     # END ASSIGN1_1
 
 
