@@ -65,10 +65,30 @@ class Linear(minitorch.Module):
         # 3. Apply Matrix Multiplication on input x and self.weights, and reshape the output to be of size (batch, self.out_size)
         # 4. Add self.bias
         # HINT: You can use the view function of minitorch.tensor for reshape
+        #return (
+        #    x.view(batch, in_size) @ self.weights.value.view(in_size, self.out_size)
+        #).view(batch, self.out_size) + self.bias.value
 
-        return (
-            x.view(batch, in_size) @ self.weights.value.view(in_size, self.out_size)
-        ).view(batch, self.out_size) + self.bias.value
+        stage = iter(tqdm(range(1, 5), total=4, unit="Linstep"))
+
+        x_v = x.view(batch, in_size)
+        next(stage)
+
+        w_v = self.weights.value.view(in_size, self.out_size)
+        next(stage)
+
+        m = x_v @ w_v
+        next(stage)
+
+        activation = m.view(batch, self.out_size)
+        next(stage)
+
+        out = activation + self.bias.value
+        try:
+            next(stage)
+        except StopIteration:
+            pass
+        return out
 
         # END ASSIGN1_2
 
