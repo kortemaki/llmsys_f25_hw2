@@ -26,8 +26,11 @@ def cross_entropy_loss(out, y):
     # 2. Compute log softmax of out and (ones - out)
     # 3. Calculate binary cross entropy and take mean
     # HINT: Use minitorch.tensor_functions.ones, minitorch.nn.logsoftmax
-
-    raise NotImplementedError("cross_entropy_loss not implemented")
+    print(y.shape)
+    lsm_1 = minitorch.nn.logsoftmax(out, 1)
+    lsm_0 = minitorch.nn.logsoftmax(minitorch.tensor_functions.ones(y.shape) - out, 1)
+    bce = - y*lsm_1 - (minitorch.tensor_functions.ones(y.shape) - y)*lsm_0
+    return bce.mean(1)
 
     # END ASSIGN1_3
 
@@ -213,7 +216,25 @@ class SentenceSentimentTrain:
                 # 5. Call backward function of the loss
                 # 6. Use Optimizer to take a gradient step
 
-                raise NotImplementedError("SentenceSentimentTrain train not implemented")
+                # 1
+                x = minitorch.tensor(X_train, backend=BACKEND)
+                y = minitorch.tensor(y_train, backend=BACKEND)
+
+                # 2
+                x.requires_grad_(True)
+                y.requires_grad_(True)
+
+                # 3
+                out = model.forward(x)
+
+                # 4
+                loss = cross_entropy_loss(out, y)
+
+                # 5
+                loss.backward()
+
+                # 6
+                optim.step()
 
                 # END ASSIGN1_3
 
