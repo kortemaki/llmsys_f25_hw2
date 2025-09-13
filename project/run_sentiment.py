@@ -9,8 +9,9 @@ import minitorch
 
 from datasets import load_dataset
 
-from minitorch import SimpleOps
+from minitorch import SimpleOps, CudaKernelOps
 BACKEND = minitorch.TensorBackend(SimpleOps)
+CUDA = minitorch.TensorBackend(CudaKernelOps)
 
 BATCH = 10
 
@@ -257,8 +258,8 @@ class SentenceSentimentTrain:
                 # 4. Obtain the validation accuracy using the get_accuracy function, and add to the validation_accuracy list
 
                 # 1
-                x = minitorch.tensor(X_val)
-                y = minitorch.tensor(y_val)
+                x = minitorch.tensor(X_val, backend=CUDA)
+                y = minitorch.tensor(y_val, backend=CUDA)
 
                 # 2
                 out = model.forward(x)
