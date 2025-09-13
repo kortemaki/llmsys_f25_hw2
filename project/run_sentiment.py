@@ -9,7 +9,8 @@ import minitorch
 
 from datasets import load_dataset
 
-from minitorch import SimpleOps, CudaKernelOps
+from minitorch import SimpleOps
+from minitorch.cuda_kernel_ops import CudaKernelOps
 BACKEND = minitorch.TensorBackend(SimpleOps)
 CUDA = minitorch.TensorBackend(CudaKernelOps)
 
