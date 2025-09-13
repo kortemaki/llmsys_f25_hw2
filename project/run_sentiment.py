@@ -95,7 +95,8 @@ class Network(minitorch.Module):
         # TODO
         # 1. Construct two linear layers: the first one is embedding_dim * hidden_dim, the second one is hidden_dim * 1
 
-        raise NotImplementedError("Network not implemented")
+        self.h1 = Linear(embedding_dim, hidden_dim)
+        self.h2 = Linear(hidden_dim, 1)
 
         # END ASSIGN1_2
 
@@ -115,7 +116,9 @@ class Network(minitorch.Module):
         # 5. Apply sigmoid and reshape to (batch)
         # HINT: You can use minitorch.dropout for dropout, and minitorch.tensor.relu for ReLU
 
-        raise NotImplementedError("Network forward not implemented")
+        hidden = self.h1.forward(embeddings.mean(1))
+        activation = self.h2.forward(dropout(hidden.relu(), self.dropout_prob))
+        return activation.sigmoid().view(batch)
 
         # END ASSIGN1_2
 
