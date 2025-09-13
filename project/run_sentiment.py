@@ -65,30 +65,10 @@ class Linear(minitorch.Module):
         # 3. Apply Matrix Multiplication on input x and self.weights, and reshape the output to be of size (batch, self.out_size)
         # 4. Add self.bias
         # HINT: You can use the view function of minitorch.tensor for reshape
-        #return (
-        #    x.view(batch, in_size) @ self.weights.value.view(in_size, self.out_size)
-        #).view(batch, self.out_size) + self.bias.value
 
-        stage = iter(tqdm(range(1, 5), total=4, unit="Linstep"))
-
-        x_v = x.view(batch, in_size)
-        next(stage)
-
-        w_v = self.weights.value.view(in_size, self.out_size)
-        next(stage)
-
-        m = x_v @ w_v
-        next(stage)
-
-        activation = m.view(batch, self.out_size)
-        next(stage)
-
-        out = activation + self.bias.value
-        try:
-            next(stage)
-        except StopIteration:
-            pass
-        return out
+        return (
+            x.view(batch, in_size) @ self.weights.value.view(in_size, self.out_size)
+        ).view(batch, self.out_size) + self.bias.value
 
         # END ASSIGN1_2
 
@@ -238,46 +218,34 @@ class SentenceSentimentTrain:
                 # 4. Calculate the loss using Binary Crossentropy Loss
                 # 5. Call backward function of the loss
                 # 6. Use Optimizer to take a gradient step
-                stage = iter(tqdm(range(1, 7), total=6, unit="step"))
 
-                # 1 - 8s
+                # 1
                 x = minitorch.tensor(X_train, backend=BACKEND)
                 y = minitorch.tensor(y_train, backend=BACKEND)
-                next(stage)
 
-                # 2 - <1s
+                # 2
                 x.requires_grad_(True)
                 y.requires_grad_(True)
-                next(stage)
 
-                # 3 - 4:38s
+                # 3
                 out = model.forward(x)
-                next(stage)
 
-                # 4 - <1s
+                # 4
                 loss = cross_entropy_loss(out, y)
-                next(stage)
 
-                # 5 - <1s
+                # 5
                 loss.backward()
-                next(stage)
 
-                # 6 - <1s
+                # 6
                 optim.step()
-                next(stage)
 
                 # END ASSIGN1_3
-
 
                 # Save training results
                 train_predictions += get_predictions_array(y, out)
                 total_loss += loss[0]
                 n_batches += 1
 
-                try:
-                    next(stage)
-                except StopIteration:
-                    pass
 
             # Evaluate on validation set at the end of the epoch
             validation_predictions = []
