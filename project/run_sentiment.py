@@ -197,7 +197,7 @@ class SentenceSentimentTrain:
         losses = []
         train_accuracy = []
         validation_accuracy = []
-        for epoch in tqdm(range(1, max_epochs + 1), total=max_epochs):
+        for epoch in tqdm(range(1, max_epochs + 1), total=max_epochs, unit="epoch"):
             total_loss = 0.0
             n_batches = 0
 
@@ -207,7 +207,7 @@ class SentenceSentimentTrain:
 
             for batch_num, example_num in tqdm(enumerate(
                 range(0, n_training_samples, batch_size)
-            ), total=math.ceil(n_training_samples/batch_size)):
+            ), total=math.ceil(n_training_samples/batch_size), unit="batch"):
                 out=None
 
                 # BEGIN ASSIGN1_3
@@ -218,26 +218,35 @@ class SentenceSentimentTrain:
                 # 4. Calculate the loss using Binary Crossentropy Loss
                 # 5. Call backward function of the loss
                 # 6. Use Optimizer to take a gradient step
+                stage = tqdm(range(1, 8), total=7, unit="step")
 
                 # 1
+                next(stage)
                 x = minitorch.tensor(X_train, backend=BACKEND)
                 y = minitorch.tensor(y_train, backend=BACKEND)
 
                 # 2
+                next(stage)
                 x.requires_grad_(True)
                 y.requires_grad_(True)
 
                 # 3
+                next(stage)
                 out = model.forward(x)
 
                 # 4
+                next(stage)
                 loss = cross_entropy_loss(out, y)
 
                 # 5
+                next(stage)
                 loss.backward()
 
                 # 6
+                next(stage)
                 optim.step()
+
+                next(stage)
 
                 # END ASSIGN1_3
 
