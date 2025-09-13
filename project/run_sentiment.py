@@ -254,6 +254,11 @@ class SentenceSentimentTrain:
                 total_loss += loss[0]
                 n_batches += 1
 
+                try:
+                    next(stage)
+                except StopIteration:
+                    pass
+
             # Evaluate on validation set at the end of the epoch
             validation_predictions = []
             if data_val is not None:
