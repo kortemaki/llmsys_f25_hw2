@@ -1,3 +1,4 @@
+import math
 import random
 import pdb
 
@@ -8,6 +9,7 @@ sys.path.append('../')
 import minitorch
 
 from datasets import load_dataset
+from tqdm import tqdm
 
 from minitorch import SimpleOps
 from minitorch.cuda_kernel_ops import CudaKernelOps
@@ -195,7 +197,7 @@ class SentenceSentimentTrain:
         losses = []
         train_accuracy = []
         validation_accuracy = []
-        for epoch in range(1, max_epochs + 1):
+        for epoch in tqdm(range(1, max_epochs + 1), total=max_epochs):
             total_loss = 0.0
             n_batches = 0
 
@@ -203,9 +205,9 @@ class SentenceSentimentTrain:
             train_predictions = []
             batch_size = min(batch_size, n_training_samples)
 
-            for batch_num, example_num in enumerate(
+            for batch_num, example_num in tqdm(enumerate(
                 range(0, n_training_samples, batch_size)
-            ):
+            ), total=math.ceil(n_training_samples/batch_size)):
                 out=None
 
                 # BEGIN ASSIGN1_3
