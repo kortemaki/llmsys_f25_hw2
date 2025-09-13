@@ -118,7 +118,7 @@ class Network(minitorch.Module):
 
         B, *_ = embeddings.shape
         hidden = self.h1.forward(embeddings.mean(1).view(B, self.embedding_dim))
-        activation = self.h2.forward(dropout(hidden.relu(), self.dropout_prob))
+        activation = self.h2.forward(minitorch.dropout(hidden.relu(), self.dropout_prob))
         return activation.sigmoid().view(B)
 
         # END ASSIGN1_2
