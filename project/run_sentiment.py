@@ -61,8 +61,8 @@ class Linear(minitorch.Module):
         # HINT: You can use the view function of minitorch.tensor for reshape
 
         return (
-            x.view(batch, in_size) @ self.weights.view(in_size, self.out_size)
-        ).view(batch, self.out_size) + self.bias
+            x.view(batch, in_size) @ self.weights.value.view(in_size, self.out_size)
+        ).view(batch, self.out_size) + self.bias.value
 
         # END ASSIGN1_2
 
