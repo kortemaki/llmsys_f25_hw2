@@ -26,11 +26,10 @@ def cross_entropy_loss(out, y):
     # 2. Compute log softmax of out and (ones - out)
     # 3. Calculate binary cross entropy and take mean
     # HINT: Use minitorch.tensor_functions.ones, minitorch.nn.logsoftmax
-    print(y.shape)
-    lsm_1 = minitorch.nn.logsoftmax(out, 1)
-    lsm_0 = minitorch.nn.logsoftmax(minitorch.tensor_functions.ones(y.shape) - out, 1)
+    lsm_1 = minitorch.nn.logsoftmax(out, 0)
+    lsm_0 = minitorch.nn.logsoftmax(minitorch.tensor_functions.ones(y.shape) - out, 0)
     bce = - y*lsm_1 - (minitorch.tensor_functions.ones(y.shape) - y)*lsm_0
-    return bce.mean(1)
+    return bce.mean()
 
     # END ASSIGN1_3
 
@@ -257,7 +256,20 @@ class SentenceSentimentTrain:
                 # 3. Obtain validation predictions using the get_predictions_array function, and add to the validation_predictions list
                 # 4. Obtain the validation accuracy using the get_accuracy function, and add to the validation_accuracy list
 
-                raise NotImplementedError("SentenceSentimentTrain train not implemented")
+                # 1
+                x = minitorch.tensor(X_val)
+                y = minitorch.tensor(y_val)
+
+                # 2
+                out = model.forward(x)
+
+                # 3
+                y_pred = get_predictions_array(y, out)
+                validation_predictions.append(y_pred)
+
+                # 4
+                acc = get_accuracy(y_pred)
+                validation_accuracy.append(acc)
 
                 # END ASSIGN1_3
 
