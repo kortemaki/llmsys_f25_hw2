@@ -218,7 +218,7 @@ class SentenceSentimentTrain:
                 # 4. Calculate the loss using Binary Crossentropy Loss
                 # 5. Call backward function of the loss
                 # 6. Use Optimizer to take a gradient step
-                stage = tqdm(range(1, 8), total=7, unit="step")
+                stage = iter(tqdm(range(1, 7), total=6, unit="step"))
 
                 # 1
                 next(stage)
