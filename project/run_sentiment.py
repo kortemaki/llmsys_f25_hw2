@@ -46,8 +46,8 @@ class Linear(minitorch.Module):
         # 3. Set self.out_size to be out_size
         # HINT: make sure to use the RParam function
 
-        self.weights = RParam(in_size, out_size)
-        self.bias = RParam(out_size)
+        self._parameters['weights'] = self.weights = RParam(in_size, out_size)
+        self._parameters['bias'] = self.bias = RParam(out_size)
         self.out_size = out_size
 
         # END ASSIGN1_2
@@ -99,8 +99,8 @@ class Network(minitorch.Module):
         # TODO
         # 1. Construct two linear layers: the first one is embedding_dim * hidden_dim, the second one is hidden_dim * 1
 
-        self.h1 = Linear(embedding_dim, hidden_dim)
-        self.h2 = Linear(hidden_dim, 1)
+        self._modules['h1'] = self.h1 = Linear(embedding_dim, hidden_dim)
+        self._modules['h2'] = self.h2 = Linear(hidden_dim, 1)
 
         # END ASSIGN1_2
 
