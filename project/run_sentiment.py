@@ -220,32 +220,30 @@ class SentenceSentimentTrain:
                 # 6. Use Optimizer to take a gradient step
                 stage = iter(tqdm(range(1, 7), total=6, unit="step"))
 
-                # 1
-                next(stage)
+                # 1 - 8s
                 x = minitorch.tensor(X_train, backend=BACKEND)
                 y = minitorch.tensor(y_train, backend=BACKEND)
-
-                # 2
                 next(stage)
+
+                # 2 - <1s
                 x.requires_grad_(True)
                 y.requires_grad_(True)
-
-                # 3
                 next(stage)
+
+                # 3 - 4:38s
                 out = model.forward(x)
-
-                # 4
                 next(stage)
+
+                # 4 - <1s
                 loss = cross_entropy_loss(out, y)
-
-                # 5
                 next(stage)
+
+                # 5 - <1s
                 loss.backward()
-
-                # 6
                 next(stage)
-                optim.step()
 
+                # 6 - <1s
+                optim.step()
                 next(stage)
 
                 # END ASSIGN1_3
