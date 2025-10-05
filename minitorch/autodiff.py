@@ -137,20 +137,16 @@ def backpropagate(variable: Variable, deriv: Any) -> None:
     No return. Should write to its results to the derivative values of each leaf through `accumulate_derivative`.
     """
     # BEGIN ASSIGN1_1
-
-    # base case - variable is constant - no derivative to propagate
-    if variable.is_constant():
-        return
-    
-    # base case - variable is a leaf - accumulate deriv here
-    if variable.is_leaf():
-        variable.accumulate_derivative(deriv)
-        return
-
-    # recursive case - propagate deriv using the chain rule
-    for (var, d_part) in variable.chain_rule(deriv):
-        backpropagate(var, d_part)
-
+    var2deriv = defaultdict(lambda: 0)
+    var2deriv[variable.unique_id] += deriv
+    for var in topological_sort(variable):
+        if var.is_leaf():
+            var.accumulate_derivative(var2deriv[var.unique_id])
+            continue
+        for parent, d in var.chain_rule(var2deriv[var.unique_id]):
+            if parent.is_constant():
+                continue
+            var2deriv[parent.unique_id] += d
     # END ASSIGN1_1
 
 
